@@ -82,8 +82,8 @@ def ack_hendler(seq_num,received, client_socket):#function that handle all ack p
                     break
             print(f"ACK:{last_ack}")
             client_socket.send(f"ACK:{last_ack}\n".encode())
-
-        if seq_num == len(received)-1 :  #when the message arrived in order as excepted
+        #if seq_num == len(received) - 1 and seq_num != 1: #(bug2)
+        if seq_num == len(received)-1:  #when the message arrived in order as excepted
             print(f"ACK:{seq_num}")
             client_socket.send(f"ACK:{seq_num}\n".encode())
             last_ack = seq_num

@@ -20,7 +20,7 @@ def start_client():
     max_msg_size =int(client_socket.recv(1024).decode()) # get the size
 
     print(f"Maximum message size is: {max_msg_size} bytes")
-
+    print(f"String len is {len(massage)}")
     seg_part =math.ceil(len(massage)/max_msg_size)  #get the maximum message size
     seg_count = 0
     start = 0
@@ -39,8 +39,9 @@ def start_client():
     unacknowledged = []
     recived_ack = []
     #last_ack=-1
-
+    print(seg_part)
     print(f"Full massage in parts: size:{len(full_msg)} {full_msg}")
+
 
     while start<=(len(full_msg)): #run on the packets number
         #sanding the messages
@@ -48,7 +49,7 @@ def start_client():
             if len(unacknowledged)>0:
                 if unacknowledged[0]+win_size<end:
                     break
-            # if end ==4:# or end==1: #bug1        #bug check if  packets not arrived to the server
+            # if end ==0: #bug1        #bug check if  packets not arrived to the server
             #     unacknowledged.append(end)
             #     print(f"Sent: {end}:{full_msg[end]}")
             #     end +=1
@@ -59,7 +60,7 @@ def start_client():
                # set(list(unacknowledged).sort())
             header = "0"* (8-len(str(end))) + str(end)
             client_socket.sendall(f"M{header}:{full_msg[end]}\n".encode()) #sand all massages that available in window
-            time.sleep(0.02)
+            time.sleep(0.05)
             print(f"Sent: M{header}: {full_msg[end]}")
             unacknowledged.append(end) #add the segment number to the unacknowledged
             end += 1
@@ -94,7 +95,7 @@ def start_client():
                             start += 1
                             #last_ack=i
 
-                    print(f"unacknowledged: {unacknowledged}")
+                    #print(f"unacknowledged: {unacknowledged}")
                     unacknowledged = unacknowledged[counter:]
                     print(f"unacknowledged: {unacknowledged}")
 
